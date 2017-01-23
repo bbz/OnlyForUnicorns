@@ -5,11 +5,12 @@ ONLY FOR UNICORNS ONLY FOR UNICORNS ONLY FOR UNICORNS ONLY FOR UNICORNS ONLY FOR
 !!!!!!!! IF YOU ARE NOT A UNICORN THEN GET OUT !!!!!!!!
 !!!!!!!! IF YOU ARE NOT A UNICORN THEN GET OUT !!!!!!!!
 !!!!!!!! IF YOU ARE NOT A UNICORN THEN GET OUT !!!!!!!!
+!!!!!!!! IF YOU ARE NOT A UNICORN THEN GET OUT !!!!!!!!
 
 # OnlyForUnicorns
 Arduino code for Adafruit Feather M0 with FeatherWing and FLORA 9-DOF
 
-Hardware requirements: (make work with other hardward BUT ONLY IF YOU ARE A UNICORN!!!)
+Hardware requirements: (may work with other hardward BUT ONLY IF YOU ARE A UNICORN!!!)
 
 https://www.adafruit.com/products/2772
 https://www.adafruit.com/products/2945

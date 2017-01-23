@@ -1,13 +1,16 @@
+#include <Adafruit_LSM9DS0.h>
+#include <FastLED.h>
+
 #define LED_PIN    6
 #define CHIPSET    NEOPIXEL
 
 #define LED_MATRIX_WIDTH  8
 #define LED_MATRIX_HEIGHT 4
 #define NUM_LEDS (LED_MATRIX_WIDTH * LED_MATRIX_HEIGHT)
-#define LED_MIN_BRIGHTNESS 2
+#define LED_MIN_BRIGHTNESS 4
 #define LED_MAX_BRIGHTNESS 255
 
-#define INIT_FLASH_TIME 50
+#define INIT_FLASH_TIME 100
 
 
 #define ACCEL_THRESH        (SENSORS_GRAVITY_EARTH + 1.25)
@@ -34,4 +37,10 @@
 //#define E1_RAMP  500
 #define E1_DECAY 15000 /*9000*/ /*8000*/ /*5000*/
 #define E1_DIV   1000
+
+extern Adafruit_LSM9DS0 lsm;
+extern CRGB leds[NUM_LEDS];
+extern sensors_event_t accel, mag, gyro, temp;
+
+void color_duration(CRGB color, uint8_t bright, uint16_t duration);
 

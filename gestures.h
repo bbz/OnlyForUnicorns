@@ -1,3 +1,4 @@
+#define ORTH_ACCEL (((SENSORS_GRAVITY_EARTH) - 0.00) * 0.15) //0.20
 
 bool IsOrthToX(float x, float y, float z);
 bool IsOrthToY(float x, float y, float z);
