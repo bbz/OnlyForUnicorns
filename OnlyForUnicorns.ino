@@ -5,6 +5,7 @@
 void chromo_strobe_loop(void);
 void sensorapi_loop(void);
 void rainbow_loop(void);
+void fire_loop(void);
 
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
 sensors_event_t accel, mag, gyro, temp;
@@ -17,6 +18,7 @@ void loop() {
     case 0:   chromo_strobe_loop(); break;
     case 1:   sensorapi_loop();     break;
     case 2:   rainbow_loop();       break;
+    case 5:   fire_loop();          break;
   }
 }
 
