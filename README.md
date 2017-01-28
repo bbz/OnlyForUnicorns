@@ -22,7 +22,7 @@ Arduino code for Adafruit Feather M0 with FeatherWing and FLORA 9-DOF
 
 - https://github.com/adafruit/Adafruit_Sensor
 - https://github.com/adafruit/Adafruit_LSM9DS0_Library
-- https://github.com/FastLED/FastLED
+- https://github.com/FastLED/FastLED (I recommend cloning the GitHub, commenting out the annoying pragma you’ll see on every compile, and symlinking into your libraries, assuming you’re not on Windows since if you are you are PROBABLY NOT A UNICORN AND SHOULD NOT EVEN BE HERE!!!)
 
 **Board requirements (from board manager URL https://adafruit.github.io/arduino-board-index/package_adafruit_index.json)**
 

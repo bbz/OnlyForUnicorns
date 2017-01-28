@@ -1,6 +1,5 @@
 #include "OnlyForUnicorns.h"
 #include "gestures.h"
-#include "chromo_strobe_loop.h"
 #include "fast_led_helpers.h"
 
 uint32_t e1 = 0;

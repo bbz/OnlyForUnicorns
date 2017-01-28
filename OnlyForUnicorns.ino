@@ -1,12 +1,24 @@
-//#include <Adafruit_LSM9DS0.h>
-//#include <FastLED.h>
 #include "OnlyForUnicorns.h"
 #include "gestures.h"
-#include "chromo_strobe_loop.h"
 #include "fast_led_helpers.h"
 
+void chromo_strobe_loop(void);
+void sensorapi_loop(void);
+void rainbow_loop(void);
+
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
+sensors_event_t accel, mag, gyro, temp;
 CRGB leds[NUM_LEDS];
+char mode = 0;
+
+void loop() {
+  lsm.getEvent(&accel, &mag, &gyro, &temp);
+  switch (get_mode()) {
+    case 0:   chromo_strobe_loop(); break;
+    case 1:   sensorapi_loop();     break;
+    case 2:   rainbow_loop();       break;
+  }
+}
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -54,6 +66,8 @@ void setup() {
 
   color_duration(CRGB::Purple, LED_MIN_BRIGHTNESS, INIT_FLASH_TIME);
 
+  set_mode();
+  
   Serial.println("Initialization complete.\r\n");
 
   FastLED.setBrightness(0);
@@ -64,10 +78,40 @@ void setup() {
   return;
 }
 
-sensors_event_t accel, mag, gyro, temp;
-
-void loop() {
+void set_mode() {
+  // check orientation and set mode based on it
   lsm.getEvent(&accel, &mag, &gyro, &temp);
-  chromo_strobe_loop();
+
+  float x = accel.acceleration.x;
+  float y = accel.acceleration.y;
+  float z = accel.acceleration.z;
+
+  float abs_x = abs(x);
+  float abs_y = abs(y);
+  float abs_z = abs(z);
+
+  if (abs_z > abs_x && abs_z > abs_y) {
+    if (z > 0) {
+      mode = 0; // +z
+    } else {
+      mode = 1; // -z
+    }
+  } else if  (abs_y > abs_x && abs_y > abs_z) {
+    if (y > 0) {
+      mode = 2; // +y
+    } else {
+      mode = 3; // -y
+    } 
+  } else {
+    if (x > 0) {
+      mode = 4; // +x
+    } else {
+      mode = 5; // -x
+    } 
+  }
+}
+
+char get_mode() {
+  return mode;
 }
 
