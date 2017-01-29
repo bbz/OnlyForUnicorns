@@ -38,9 +38,17 @@
 #define E1_DECAY 15000 /*9000*/ /*8000*/ /*5000*/
 #define E1_DIV   1000
 
+#define Z_UP   0
+#define Z_DOWN 1
+#define Y_UP   2
+#define Y_DOWN 3
+#define X_UP   4
+#define X_DOWN 5
+
 extern Adafruit_LSM9DS0 lsm;
 extern CRGB leds[NUM_LEDS];
 extern sensors_event_t accel, mag, gyro, temp;
 
 void color_duration(CRGB color, uint8_t bright, uint16_t duration);
+char get_orientation(void);
 

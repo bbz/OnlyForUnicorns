@@ -10,11 +10,11 @@ void fire_loop(void);
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
 sensors_event_t accel, mag, gyro, temp;
 CRGB leds[NUM_LEDS];
-char mode = 0;
+char initial_orientation = 0;
 
 void loop() {
   lsm.getEvent(&accel, &mag, &gyro, &temp);
-  switch (get_mode()) {
+  switch (initial_orientation) {
     case 0:   chromo_strobe_loop(); break;
     case 1:   sensorapi_loop();     break;
     case 2:   rainbow_loop();       break;
@@ -68,7 +68,7 @@ void setup() {
 
   color_duration(CRGB::Purple, LED_MIN_BRIGHTNESS, INIT_FLASH_TIME);
 
-  set_mode();
+  set_initial_orientation();
   
   Serial.println("Initialization complete.\r\n");
 
@@ -80,10 +80,14 @@ void setup() {
   return;
 }
 
-void set_mode() {
-  // check orientation and set mode based on it
+void set_initial_orientation() {
+  // check orientation and set initial_orientation based on it
   lsm.getEvent(&accel, &mag, &gyro, &temp);
 
+  initial_orientation = get_orientation();
+}
+
+char get_orientation() {
   float x = accel.acceleration.x;
   float y = accel.acceleration.y;
   float z = accel.acceleration.z;
@@ -94,26 +98,22 @@ void set_mode() {
 
   if (abs_z > abs_x && abs_z > abs_y) {
     if (z > 0) {
-      mode = 0; // +z
+      return Z_UP;
     } else {
-      mode = 1; // -z
+      return Z_DOWN;
     }
   } else if  (abs_y > abs_x && abs_y > abs_z) {
     if (y > 0) {
-      mode = 2; // +y
+      return Y_UP;
     } else {
-      mode = 3; // -y
+      return Y_DOWN;
     } 
   } else {
     if (x > 0) {
-      mode = 4; // +x
+      return X_UP;
     } else {
-      mode = 5; // -x
+      return X_DOWN;
     } 
   }
-}
-
-char get_mode() {
-  return mode;
 }
 

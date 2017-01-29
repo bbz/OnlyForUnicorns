@@ -13,7 +13,7 @@
 //#define BRIGHTNESS  200
 #define FRAMES_PER_SECOND 60
 
-bool gReverseDirection = true;
+char orientation = 0;
 
 /*
 CRGB leds[NUM_LEDS];
@@ -31,6 +31,8 @@ void fire_loop()
 {
   // Add entropy to random number generator; we use a lot of it.
   // random16_add_entropy( random());
+
+  orientation = get_orientation();
 
   Fire2012(); // run simulation frame
   
@@ -120,13 +122,16 @@ void Fire2012()
       this_heat = min(this_heat, 170); // prevent white pixels
       CRGB color = HeatColor(this_heat);
       int pixelnumber;
-      if( gReverseDirection ) {
+      if( orientation == X_DOWN || orientation == Y_UP ) {
         pixelnumber = (NUM_LEDS-1) - j;
       } else {
         pixelnumber = j;
       }
-      //leds[pixelnumber] = color;
-      leds[ (int)(pixelnumber / 4) + (pixelnumber % 4) * 8  ] = color;
+      if (orientation == Y_UP || orientation == Y_DOWN) {
+        leds[pixelnumber] = color;
+      } else {
+        leds[ (int)(pixelnumber / 4) + (pixelnumber % 4) * 8  ] = color;
+      }
     }
 }
 
