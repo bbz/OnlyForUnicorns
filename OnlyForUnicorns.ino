@@ -4,7 +4,7 @@
 
 void chromo_strobe_loop(void);
 void sensorapi_loop(void);
-void rainbow_loop(void);
+void rainbow_loop(char jump, char roll);
 void fire_loop(void);
 
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
@@ -15,10 +15,12 @@ char initial_orientation = 0;
 void loop() {
   lsm.getEvent(&accel, &mag, &gyro, &temp);
   switch (initial_orientation) {
-    case 0:   chromo_strobe_loop(); break;
-    case 1:   sensorapi_loop();     break;
-    case 2:   rainbow_loop();       break;
-    case 5:   fire_loop();          break;
+    case Z_UP:   chromo_strobe_loop(); break;
+    case Z_DOWN: sensorapi_loop();     break;
+    case Y_UP:   rainbow_loop(0, 0);   break;
+    case Y_DOWN: rainbow_loop(32, 1);  break;
+    case X_UP:
+    case X_DOWN: fire_loop();          break;
   }
 }
 

@@ -4,14 +4,14 @@
 
 char counter = 0;
 
-void rainbow_loop() {
-
+void rainbow_loop(char jump, char roll) {
+  
   float x = accel.acceleration.x;
   float y = accel.acceleration.y;
   float z = accel.acceleration.z;
 
-  //counter = (counter + 1) % 256;
-  fill_rainbow(leds, NUM_LEDS, (int)(10*(x+y) + counter) % 256, 1);
+  counter = (counter + roll) % 256;
+  fill_rainbow(leds, NUM_LEDS, (int)(10*(x+y) + counter) % 256, jump);
   FastLED.show();
       
 
