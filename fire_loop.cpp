@@ -25,16 +25,23 @@ void setup() {
 }
 */
 
-void Fire2012(void);
+void fire_loop_int(char type);
+void Fire2012(char type);
 
-void fire_loop()
-{
+void fire_loop() {
+  fire_loop_int(0);
+}
+
+void fire_loop_int(char type) {
+  // type 0 = fire
+  // type 1 = rainbow
+  
   // Add entropy to random number generator; we use a lot of it.
   // random16_add_entropy( random());
 
   orientation = get_orientation();
 
-  Fire2012(); // run simulation frame
+  Fire2012(type); // run simulation frame
   
   FastLED.show(); // display this frame
   FastLED.delay(1000 / FRAMES_PER_SECOND);
@@ -80,16 +87,23 @@ void fire_loop()
 #define SPARKING 120
 
 
-void Fire2012()
+void Fire2012(char type)
 {
 // Array of temperature readings at each simulation cell
   static byte heat[NUM_LEDS];
 
   // Step 1.  Cool down every cell a little
     for( int i = 0; i < NUM_LEDS; i++) {
-      heat[i] = qsub8( heat[i], random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
-      //heat[i] = qsub8( heat[i],  random8(50));
-      //heat[i] = heat[i] - min(heat[i], random8(8));
+      switch (type) {
+        case 0:
+          heat[i] = qsub8( heat[i], random8(0, ((COOLING * 10) / NUM_LEDS) + 2));
+          //heat[i] = qsub8( heat[i],  random8(50));
+          //heat[i] = heat[i] - min(heat[i], random8(8));
+          break;
+        case 1:
+          heat[i] = qsub8( heat[i], random8(0, ((COOLING * 7) / NUM_LEDS) + 2));
+          break;
+      }
     }
   
     // Step 2.  Heat from each cell drifts 'up' and diffuses a little
@@ -109,18 +123,45 @@ void Fire2012()
 //    }
     
     // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
-    if( random8() < SPARKING ) {
-      char y = random8(4);
-      heat[y] = qadd8( heat[y], random8(160,255) );
+    switch (type) {
+      case 0:
+        if(random8() < SPARKING ) {
+          char y = random8(4);
+          heat[y] = qadd8( heat[y], random8(160,255) );
+        }
+        break;
+      case 1:
+        if(random8() < SPARKING ) {
+          char y = random8(8);
+          heat[y] = qadd8( heat[y], random8(160,255) );
+        }
+        break;
     }
-
+    
     // Step 4.  Map from heat cells to LED colors
     for( int j = 0; j < NUM_LEDS; j++) {
       char this_heat = heat[j];
-      if (this_heat > 32) { this_heat = this_heat - random8(32); } // add flicker
-      if (j < 4) { this_heat = max(80, this_heat); } // keep bottom row warm
-      this_heat = min(this_heat, 170); // prevent white pixels
-      CRGB color = HeatColor(this_heat);
+      CRGB color;
+      switch (type) {
+        case 0:
+          if (this_heat > 32) { this_heat = this_heat - random8(32); } // add flicker
+          if (j < 4) { this_heat = max(80, this_heat); } // keep bottom row warm
+          this_heat = min(this_heat, 170); // prevent white pixels
+          color = HeatColor(this_heat);
+          break;
+        case 1:
+          if (j < 4) { this_heat = max(80, this_heat); } // keep bottom row warm
+          CHSV hsv;
+          hsv.hue = 255 - this_heat;
+          if (this_heat < 40) {
+            hsv.val = 0;
+          } else {
+            hsv.val = 255;
+          }
+          hsv.sat = 240;
+          color = hsv;            
+          break;
+      }
       int pixelnumber;
       if( orientation == X_DOWN || orientation == Y_UP ) {
         pixelnumber = (NUM_LEDS-1) - j;
